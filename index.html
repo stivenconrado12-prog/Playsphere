@@ -1,54 +1,99 @@
 <!doctype html>
 <html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Brisa Moda | Tienda de ropa</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SilkStore | Tienda de ropa</title>
 
-  <!-- Bootstrap 5.3.8 (CSS) -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-        crossorigin="anonymous">
-  <!-- Íconos de Bootstrap -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-  <!-- Nuestros estilos (siempre después de Bootstrap) -->
-  <link rel="stylesheet" href="css/estilos.css">
-</head>
-<body>
+    <!-- Bootstrap 5.3.8 (CSS) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <!-- Íconos de Bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+   
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
 
-  <!-- PASO 2: Barra de navegación -->
 
-  <main>
-    <!-- Contenido temporal: se borra en el paso 3 -->
-    <div class="container py-5">
-      <h1>Brisa Moda</h1>
-      <p>Sitio en construcción.</p>
-    </div>
+    <header class="sticky-top">
+      <nav
+        class="navbar navbar-expand-lg bg-body border-bottom"
+        aria-label="Menú principal"
+      >
+        <div class="container">
+          <a class="navbar-brand fw-bold" href="#inicio">
+            <i class="bi bi-bang-heart"></i>
+            Silk <span class="fw-light">Store</span>
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#menuTienda"
+            aria-controls="menuTienda"
+            aria-expanded="false"
+            aria-label="Abrir menú"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="menuTienda">
+            <ul class="navbar-nav mx-auto mb-2 mb -lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#inicio">inicio</a>
+              </li>
+              <li class="nav-item"><a class="nav-link" href="#categorias">categorias</a></li>
+              <li class="nav-item"><a class="nav-link" href="#productos">productos</a></li>
+              <li class="nav-item"><a class="nav-link" href="#preguntas">preguntas</a></li>
+            </ul>
+            <button class="btn btn-outline-dark position-relative" type="button">
+              <i class="bi bi-bang"></i>carrito
+              <span class="position-absolute top-0 start-100 translate-middle
+                            badge rounded-pill text-bg-danger" id="contadorCarrito">0</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
 
-    <!-- PASO 3: Sección principal (hero) -->
+    <main>
+     
+      <div class="container py-5">
+        <h1>SilkStore</h1>
+        <p>Sitio en construcción.</p>
+      </div>
 
-    <!-- PASO 4: Beneficios -->
+      <!-- PASO 3: Sección principal (hero) -->
 
-    <!-- PASO 5: Categorías -->
+      <!-- PASO 4: Beneficios -->
 
-    <!-- PASO 6: Productos destacados -->
+      <!-- PASO 5: Categorías -->
 
-    <!-- PASO 12: Carrusel de promociones -->
+      <!-- PASO 6: Productos destacados -->
 
-    <!-- PASO 13: Preguntas frecuentes -->
+      <!-- PASO 12: Carrusel de promociones -->
 
-    <!-- PASO 14: Suscripción -->
-  </main>
+      <!-- PASO 13: Preguntas frecuentes -->
 
-  <!-- PASO 15: Pie de página -->
+      <!-- PASO 14: Suscripción -->
+    </main>
 
-  <!-- Bootstrap 5.3.8 (JavaScript + Popper) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-          crossorigin="anonymous"></script>
-  <!-- Nuestro JavaScript -->
-  <script src="js/tienda.js"></script>
-</body>
+    <!-- PASO 15: Pie de página -->
+
+    <!-- Bootstrap 5.3.8 (JavaScript + Popper) -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Nuestro JavaScript -->
+    <script src="js/tienda.js"></script>
+  </body>
 </html>
