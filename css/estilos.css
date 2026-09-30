@@ -3,3 +3,17 @@
    Estilos PROPIOS. Se cargan después de Bootstrap para poder
    ajustar su aspecto sin modificar los archivos de Bootstrap.
    ============================================================ */
+
+
+@font-face {
+  font-family: 'Ancola';
+  src: url('/img/ancola-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+.navbar-brand {
+  font-family: 'Ancola', sans-serif;
+  font-size: 28px; 
+}
