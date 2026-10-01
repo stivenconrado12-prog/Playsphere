@@ -4,16 +4,80 @@
    ajustar su aspecto sin modificar los archivos de Bootstrap.
    ============================================================ */
 
+/* ===== PASO 7: Identidad visual de la tienda ===== */
 
-@font-face {
-  font-family: 'Ancola';
-  src: url('/img/ancola-regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+/* 1. Colores de la marca en variables */
+:root {
+  --brisa-coral: #e76f51;
+  --brisa-coral-oscuro: #c4553a;
+  --brisa-arena: #f6efe6;
 }
 
+/* 2. Fuente de toda la página */
+body {
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
 
-.navbar-brand {
-  font-family: 'Ancola', sans-serif;
-  font-size: 28px; 
+/* 3. Utilidades propias de color */
+.text-coral {
+  color: var(--brisa-coral);
+}
+
+.bg-arena {
+  background-color: var(--brisa-arena);
+}
+
+/* 4. Un botón con el color de la marca (variables del componente .btn) */
+.btn-coral {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--brisa-coral);
+  --bs-btn-border-color: var(--brisa-coral);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--brisa-coral-oscuro);
+  --bs-btn-hover-border-color: var(--brisa-coral-oscuro);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--brisa-coral-oscuro);
+  --bs-btn-active-border-color: var(--brisa-coral-oscuro);
+  --bs-btn-focus-shadow-rgb: 231, 111, 81;
+}
+
+/* 5. Tarjetas de producto: foto uniforme y efecto al pasar el mouse */
+.tarjeta-producto .card-img-top {
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.tarjeta-producto {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-producto:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+}
+
+/* 6. Categorías: la foto se acerca un poco al pasar el mouse */
+.categoria img {
+  transition: transform 0.3s ease;
+}
+
+.categoria:hover img {
+  transform: scale(1.05);
+}
+
+.categoria .card-img-overlay {
+  background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.6));
+}
+
+/* 7. Los enlaces del menú no quedan tapados por la barra fija */
+section[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+/* 8. Menos movimiento para quien lo configure en su equipo */
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta-producto,
+  .categoria img {
+    transition: none;
+  }
 }
