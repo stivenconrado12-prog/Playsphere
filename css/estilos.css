@@ -1,80 +1,91 @@
 /* ============================================================
-   estilos.css — Brisa Moda
-   Estilos PROPIOS. Se cargan después de Bootstrap para poder
-   ajustar su aspecto sin modificar los archivos de Bootstrap.
+   estilos.css — PlaySphere
+   Estilos personalizados para la plataforma de audio y podcasts.
+   Se cargan después de Bootstrap para sobrescribir y afinar el diseño.
    ============================================================ */
 
-/* ===== PASO 7: Identidad visual de la tienda ===== */
+/* ===== IDENTIDAD VISUAL DE PLAYSPHERE ===== */
 
-/* 1. Colores de la marca en variables */
+/* 1. Variables de color e identidad */
 :root {
-  --brisa-coral: #e76f51;
-  --brisa-coral-oscuro: #c4553a;
-  --brisa-arena: #f6efe6;
+  --playsphere-primary: #0d6efd;
+  --playsphere-primary-hover: #0b5ed7;
+  --playsphere-glow: rgba(13, 110, 253, 0.4);
+  --playsphere-bg-dark: #121212;
+  --playsphere-card-bg: #181818;
 }
 
-/* 2. Fuente de toda la página */
+/* 2. Tipografía general */
 body {
-  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--playsphere-bg-dark);
+  letter-spacing: -0.01em;
 }
 
-/* 3. Utilidades propias de color */
-.text-coral {
-  color: var(--brisa-coral);
+/* 3. Utilidades de espacio y texto */
+.letter-spacing {
+  letter-spacing: 0.15em;
 }
 
-.bg-arena {
-  background-color: var(--brisa-arena);
+/* 4. Tarjetas de audio/contenido (Canciones, Podcasts, Álbumes) */
+.tarjeta-producto {
+  background-color: var(--playsphere-card-bg) !important;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 4. Un botón con el color de la marca (variables del componente .btn) */
-.btn-coral {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: var(--brisa-coral);
-  --bs-btn-border-color: var(--brisa-coral);
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: var(--brisa-coral-oscuro);
-  --bs-btn-hover-border-color: var(--brisa-coral-oscuro);
-  --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: var(--brisa-coral-oscuro);
-  --bs-btn-active-border-color: var(--brisa-coral-oscuro);
-  --bs-btn-focus-shadow-rgb: 231, 111, 81;
-}
-
-/* 5. Tarjetas de producto: foto uniforme y efecto al pasar el mouse */
 .tarjeta-producto .card-img-top {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1.2; /* Portadas de discos/podcasts cuadradas */
   object-fit: cover;
 }
 
-.tarjeta-producto {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
 .tarjeta-producto:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px var(--playsphere-glow) !important;
 }
 
-/* 6. Categorías: la foto se acerca un poco al pasar el mouse */
+/* 5. Tarjetas de Categorías / Explorar */
+.categoria {
+  aspect-ratio: 16 / 9;
+}
+
 .categoria img {
-  transition: transform 0.3s ease;
+  object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
 .categoria:hover img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .categoria .card-img-overlay {
-  background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.6));
+  background: linear-gradient(to top, rgba(18, 18, 18, 0.95) 10%, rgba(18, 18, 18, 0.2) 70%, transparent);
 }
 
-/* 7. Los enlaces del menú no quedan tapados por la barra fija */
+/* 6. Ajuste de desplazamiento para navegación fija */
 section[id] {
-  scroll-margin-top: 4.5rem;
+  scroll-margin-top: 5rem;
 }
 
-/* 8. Menos movimiento para quien lo configure en su equipo */
+/* 7. Personalización de barras de desplazamiento (Scrollbar) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--playsphere-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--playsphere-primary);
+}
+
+/* 8. Accesibilidad: Reducción de movimiento */
 @media (prefers-reduced-motion: reduce) {
   .tarjeta-producto,
   .categoria img {

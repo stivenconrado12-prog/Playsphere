@@ -1,187 +1,276 @@
 // ============================================================
-// tienda.js — Brisa Moda
-// Nuestro JavaScript. Se carga después de Bootstrap, por eso
-// aquí ya existe el objeto «bootstrap».
+// tienda.js — PlaySphere
+// Lógica interactiva para la plataforma de música y podcasts
 // ============================================================
 
-// ===== PASO 8: Filtrar productos por categoría =====
+
 const botonesFiltro = document.querySelectorAll('.btn-filtro');
-const columnasProducto = document.querySelectorAll('[data-categoria]');
+const columnasContenido = document.querySelectorAll('[data-categoria]');
 
 botonesFiltro.forEach((boton) => {
   boton.addEventListener('click', () => {
-    // 1. Marcar el botón pulsado (negro) y desmarcar los demás
+    
     botonesFiltro.forEach((b) => {
-      b.classList.remove('active', 'btn-dark');
-      b.classList.add('btn-outline-dark');
+      b.classList.remove('active', 'btn-primary');
+      b.classList.add('btn-outline-light');
     });
-    boton.classList.add('active', 'btn-dark');
-    boton.classList.remove('btn-outline-dark');
+    boton.classList.add('active', 'btn-primary');
+    boton.classList.remove('btn-outline-light');
 
-    // 2. Mostrar u ocultar cada producto con la utilidad d-none
+    
     const categoria = boton.dataset.filtro;
-    columnasProducto.forEach((columna) => {
+    columnasContenido.forEach((columna) => {
       const mostrar = categoria === 'todos' || columna.dataset.categoria === categoria;
       columna.classList.toggle('d-none', !mostrar);
     });
   });
 });
 
-// ===== PASO 9: Carrito — agregar productos =====
-const carrito = [];
-const formatoPesos = new Intl.NumberFormat('es-CO', {
-  style: 'currency',
-  currency: 'COP',
-  maximumFractionDigits: 0,
-});
 
-// Muestra el aviso (toast) con un mensaje
+const biblioteca = [];
+
+
 function mostrarAviso(mensaje) {
-  const aviso = document.getElementById('avisoCarrito');
-  aviso.querySelector('.toast-body').textContent = mensaje;
-  bootstrap.Toast.getOrCreateInstance(aviso).show();
-}
-
-// Agrega un producto y avisa a toda la página que el carrito cambió
-function agregarAlCarrito(nombre, precio) {
-  carrito.push({ nombre, precio });
-  document.dispatchEvent(new CustomEvent('carrito:cambio'));
-  mostrarAviso(`«${nombre}» se agregó al carrito`);
-}
-
-// Cada botón «Agregar» lee sus atributos data-nombre y data-precio
-document.querySelectorAll('.btn-agregar').forEach((boton) => {
-  boton.addEventListener('click', () => {
-    agregarAlCarrito(boton.dataset.nombre, Number(boton.dataset.precio));
-  });
-});
-
-// Cuando el carrito cambia, se actualiza el contador de la barra
-document.addEventListener('carrito:cambio', () => {
-  document.getElementById('contadorCarrito').textContent = carrito.length;
-});
-
-// ===== PASO 10: Mostrar el carrito en el panel lateral =====
-const listaCarrito = document.getElementById('listaCarrito');
-const totalCarrito = document.getElementById('totalCarrito');
-const btnPagar = document.getElementById('btnPagar');
-
-function avisarCambio() {
-  document.dispatchEvent(new CustomEvent('carrito:cambio'));
-}
-
-function pintarCarrito() {
-  listaCarrito.innerHTML = '';
-
-  if (carrito.length === 0) {
-    const vacio = document.createElement('li');
-    vacio.className = 'list-group-item text-body-secondary';
-    vacio.textContent = 'Tu carrito está vacío.';
-    listaCarrito.appendChild(vacio);
+  const aviso = document.getElementById('avisoBiblioteca');
+  if (aviso) {
+    aviso.querySelector('.toast-body span').textContent = mensaje;
+    bootstrap.Toast.getOrCreateInstance(aviso).show();
   }
-
-  carrito.forEach((producto, indice) => {
-    const item = document.createElement('li');
-    item.className = 'list-group-item d-flex align-items-center gap-2 px-0';
-
-    const nombre = document.createElement('span');
-    nombre.className = 'flex-grow-1';
-    nombre.textContent = producto.nombre;
-
-    const precio = document.createElement('strong');
-    precio.textContent = formatoPesos.format(producto.precio);
-
-    const quitar = document.createElement('button');
-    quitar.type = 'button';
-    quitar.className = 'btn-close';
-    quitar.setAttribute('aria-label', `Quitar ${producto.nombre}`);
-    quitar.addEventListener('click', () => {
-      carrito.splice(indice, 1);
-      avisarCambio();
-    });
-
-    item.append(nombre, precio, quitar);
-    listaCarrito.appendChild(item);
-  });
-
-  const total = carrito.reduce((suma, producto) => suma + producto.precio, 0);
-  totalCarrito.textContent = formatoPesos.format(total);
-  btnPagar.disabled = carrito.length === 0;
 }
 
-document.getElementById('btnVaciar').addEventListener('click', () => {
-  carrito.length = 0;
-  avisarCambio();
-});
 
-btnPagar.addEventListener('click', () => {
-  carrito.length = 0;
-  avisarCambio();
-  bootstrap.Offcanvas.getOrCreateInstance('#panelCarrito').hide();
-  mostrarAviso('¡Gracias por tu compra! (simulación)');
-});
-
-document.addEventListener('carrito:cambio', pintarCarrito);
-pintarCarrito();
-
-// ===== PASO 11: Vista rápida del producto (modal) =====
-const modalProducto = document.getElementById('modalProducto');
-let productoEnModal = null;
-
-// Antes de abrirse, el modal lee los datos del botón que lo abrió
-modalProducto.addEventListener('show.bs.modal', (evento) => {
-  const boton = evento.relatedTarget;
-  productoEnModal = {
-    nombre: boton.dataset.nombre,
-    precio: Number(boton.dataset.precio),
-  };
-
-  const imagen = document.getElementById('modalImagen');
-  imagen.src = boton.dataset.imagen;
-  imagen.alt = boton.dataset.nombre;
-  modalProducto.querySelector('.modal-title').textContent = boton.dataset.nombre;
-  document.getElementById('modalDescripcion').textContent = boton.dataset.descripcion;
-  document.getElementById('modalPrecio').textContent =
-    formatoPesos.format(productoEnModal.precio);
-});
-
-// El botón del modal agrega el producto con la talla elegida
-document.getElementById('btnAgregarModal').addEventListener('click', () => {
-  const talla = document.getElementById('tallaModal').value;
-  agregarAlCarrito(`${productoEnModal.nombre} (talla ${talla})`, productoEnModal.precio);
-  bootstrap.Modal.getInstance(modalProducto).hide();
-});
-
-// ===== PASO 14: Validar el formulario de suscripción =====
-const formSuscripcion = document.getElementById('formSuscripcion');
-
-formSuscripcion.addEventListener('submit', (evento) => {
-  evento.preventDefault(); // no hay servidor: evitamos recargar la página
-
-  if (!formSuscripcion.checkValidity()) {
-    formSuscripcion.classList.add('was-validated'); // Bootstrap pinta los errores
+function agregarABiblioteca(nombre, tipo, artista) {
+  
+  const existe = biblioteca.some((item) => item.nombre === nombre);
+  if (existe) {
+    mostrarAviso(`«${nombre}» ya está en tu biblioteca`);
     return;
   }
 
-  mostrarAviso('¡Gracias! Te enviaremos nuestras ofertas.');
-  formSuscripcion.reset();
-  formSuscripcion.classList.remove('was-validated');
+  biblioteca.push({ nombre, tipo, artista });
+  document.dispatchEvent(new CustomEvent('biblioteca:cambio'));
+  mostrarAviso(`«${nombre}» se guardó en tu biblioteca`);
+}
+
+document.querySelectorAll('.btn-agregar').forEach((boton) => {
+  boton.addEventListener('click', () => {
+    agregarABiblioteca(
+      boton.dataset.nombre,
+      boton.dataset.tipo || 'Pista',
+      boton.dataset.artista || 'Artista desconocido'
+    );
+  });
 });
 
-// ===== PASO 16: Tooltips y botón «volver arriba» =====
 
-// 1. Bootstrap no activa los tooltips solo: los creamos aquí
+document.addEventListener('biblioteca:cambio', () => {
+  const contador = document.getElementById('contadorBiblioteca');
+  if (contador) {
+    contador.textContent = biblioteca.length;
+  }
+});
+
+const listaBiblioteca = document.getElementById('listaBiblioteca');
+const totalBiblioteca = document.getElementById('totalBiblioteca');
+const btnReproducirTodo = document.getElementById('btnReproducirTodo');
+const btnVaciarBiblioteca = document.getElementById('btnVaciarBiblioteca');
+
+function avisarCambio() {
+  document.dispatchEvent(new CustomEvent('biblioteca:cambio'));
+}
+
+function pintarBiblioteca() {
+  if (!listaBiblioteca) return;
+
+  listaBiblioteca.innerHTML = '';
+
+  if (biblioteca.length === 0) {
+    const vacio = document.createElement('li');
+    vacio.className = 'list-group-item bg-transparent text-secondary text-center py-4 border-0';
+    vacio.textContent = 'Tu biblioteca está vacía.';
+    listaBiblioteca.appendChild(vacio);
+  }
+
+  biblioteca.forEach((itemAudio, indice) => {
+    const item = document.createElement('li');
+    item.className = 'list-group-item bg-dark text-light border-secondary border-opacity-25 d-flex align-items-center gap-2 px-2 py-3';
+
+    const icono = document.createElement('i');
+    icono.className = itemAudio.tipo === 'Podcast' ? 'bi bi-mic-fill text-info fs-5' : 'bi bi-music-note-beaming text-primary fs-5';
+
+    const info = document.createElement('div');
+    info.className = 'flex-grow-1 overflow-hidden';
+    
+    const titulo = document.createElement('p');
+    titulo.className = 'mb-0 fw-semibold text-truncate small';
+    titulo.textContent = itemAudio.nombre;
+
+    const detalle = document.createElement('p');
+    detalle.className = 'mb-0 text-secondary extra-small';
+    detalle.style.fontSize = '0.75rem';
+    detalle.textContent = `${itemAudio.artista} • ${itemAudio.tipo}`;
+
+    info.append(titulo, detalle);
+
+    const quitar = document.createElement('button');
+    quitar.type = 'button';
+    quitar.className = 'btn-close btn-close-white ms-auto';
+    quitar.setAttribute('aria-label', `Eliminar ${itemAudio.nombre}`);
+    quitar.addEventListener('click', () => {
+      biblioteca.splice(indice, 1);
+      avisarCambio();
+    });
+
+    item.append(icono, info, quitar);
+    listaBiblioteca.appendChild(item);
+  });
+
+  if (totalBiblioteca) {
+    totalBiblioteca.textContent = biblioteca.length;
+  }
+
+  if (btnReproducirTodo) {
+    btnReproducirTodo.disabled = biblioteca.length === 0;
+  }
+}
+
+if (btnVaciarBiblioteca) {
+  btnVaciarBiblioteca.addEventListener('click', () => {
+    biblioteca.length = 0;
+    avisarCambio();
+  });
+}
+
+if (btnReproducirTodo) {
+  btnReproducirTodo.addEventListener('click', () => {
+    mostrarAviso('Reproduciendo biblioteca completa...');
+  });
+}
+
+document.addEventListener('biblioteca:cambio', pintarBiblioteca);
+pintarBiblioteca();
+
+// ===== PASO 4: Vista rápida / Detalle del elemento (Modal) =====
+const modalDetalles = document.getElementById('modalDetalles');
+let elementoEnModal = null;
+
+if (modalDetalles) {
+  modalDetalles.addEventListener('show.bs.modal', (evento) => {
+    const boton = evento.relatedTarget;
+    elementoEnModal = {
+      nombre: boton.dataset.nombre,
+      tipo: boton.dataset.tipo,
+      artista: boton.dataset.artista || 'Artista de PlaySphere',
+    };
+
+    const imagen = document.getElementById('modalImagen');
+    if (imagen) {
+      imagen.src = boton.dataset.imagen;
+      imagen.alt = boton.dataset.nombre;
+    }
+
+    const tipoBadge = document.getElementById('modalTipo');
+    if (tipoBadge) {
+      tipoBadge.textContent = boton.dataset.tipo;
+    }
+
+    const tituloModal = document.getElementById('modalNombre');
+    if (tituloModal) {
+      tituloModal.textContent = boton.dataset.nombre;
+    }
+
+    const descModal = document.getElementById('modalDescripcion');
+    if (descModal) {
+      descModal.textContent = boton.dataset.descripcion;
+    }
+  });
+
+  const btnAgregarModal = document.getElementById('btnAgregarModal');
+  if (btnAgregarModal) {
+    btnAgregarModal.addEventListener('click', () => {
+      if (elementoEnModal) {
+        const calidad = document.getElementById('calidadAudioModal')?.value || '';
+        agregarABiblioteca(
+          `${elementoEnModal.nombre}`,
+          elementoEnModal.tipo,
+          `${elementoEnModal.artista}`
+        );
+        bootstrap.Modal.getInstance(modalDetalles).hide();
+      }
+    });
+  }
+}
+
+
+const formSuscripcion = document.getElementById('formSuscripcion');
+
+if (formSuscripcion) {
+  formSuscripcion.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+
+    if (!formSuscripcion.checkValidity()) {
+      formSuscripcion.classList.add('was-validated');
+      return;
+    }
+
+    mostrarAviso('¡Suscripción exitosa! Te enviaremos los mejores estrenos.');
+    formSuscripcion.reset();
+    formSuscripcion.classList.remove('was-validated');
+  });
+}
+
+
 document.querySelectorAll('[data-bs-title]').forEach((elemento) => {
   new bootstrap.Tooltip(elemento);
 });
 
-// 2. El botón aparece al bajar 400 px y lleva al inicio con suavidad
 const btnArriba = document.getElementById('btnArriba');
 
-window.addEventListener('scroll', () => {
-  btnArriba.classList.toggle('d-none', window.scrollY < 400);
+if (btnArriba) {
+  window.addEventListener('scroll', () => {
+    btnArriba.classList.toggle('d-none', window.scrollY < 400);
+  });
+
+  btnArriba.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// ===== REPRODUCTOR DE AUDIO =====
+const reproductor = new Audio();
+let botonActual = null;
+
+document.querySelectorAll('.btn-reproducir').forEach(function (boton) {
+  boton.addEventListener('click', function () {
+    const ruta = boton.dataset.audio;
+
+    // Si se pulsa el mismo botón: pausar o continuar
+    if (botonActual === boton) {
+      if (reproductor.paused) {
+        reproductor.play();
+        boton.innerHTML = '<i class="bi bi-pause-fill"></i> Pausar';
+      } else {
+        reproductor.pause();
+        boton.innerHTML = '<i class="bi bi-play-fill"></i> Reproducir';
+      }
+      return;
+    }
+
+    // Si era otro botón: restaurar el anterior y reproducir el nuevo
+    if (botonActual) {
+      botonActual.innerHTML = '<i class="bi bi-play-fill"></i> Reproducir';
+    }
+    reproductor.src = ruta;
+    reproductor.play();
+    boton.innerHTML = '<i class="bi bi-pause-fill"></i> Pausar';
+    botonActual = boton;
+  });
 });
 
-btnArriba.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+// Al terminar el audio, volver al estado inicial
+reproductor.addEventListener('ended', function () {
+  if (botonActual) {
+    botonActual.innerHTML = '<i class="bi bi-play-fill"></i> Reproducir';
+    botonActual = null;
+  }
 });
