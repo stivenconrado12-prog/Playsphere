@@ -6,7 +6,6 @@
 
 /* ===== IDENTIDAD VISUAL DE PLAYSPHERE ===== */
 
-
 :root {
   --playsphere-primary: #0d6efd;
   --playsphere-primary-hover: #0b5ed7;
@@ -15,6 +14,9 @@
   --playsphere-card-bg: #181818;
 }
 
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -26,15 +28,18 @@ body {
   letter-spacing: 0.15em;
 }
 
+.extra-small {
+  font-size: 0.75rem;
+}
 
 .tarjeta-producto {
   background-color: var(--playsphere-card-bg) !important;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
               box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tarjeta-producto .card-img-top {
-  aspect-ratio: 1 / 1.2; 
+  aspect-ratio: 1 / 1.2;
   object-fit: cover;
 }
 
@@ -48,6 +53,7 @@ body {
 }
 
 .categoria img {
+  height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
 }
@@ -60,11 +66,9 @@ body {
   background: linear-gradient(to top, rgba(18, 18, 18, 0.95) 10%, rgba(18, 18, 18, 0.2) 70%, transparent);
 }
 
-
 section[id] {
   scroll-margin-top: 5rem;
 }
-
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -83,8 +87,11 @@ section[id] {
   background: var(--playsphere-primary);
 }
 
-
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .tarjeta-producto,
   .categoria img {
     transition: none;
