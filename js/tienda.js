@@ -39,7 +39,7 @@ function mostrarAviso(mensaje) {
 }
 
 
-function agregarABiblioteca(nombre, tipo, artista) {
+function agregarABiblioteca(nombre, tipo, artista, audio) {
   
   const existe = biblioteca.some((item) => item.nombre === nombre);
   if (existe) {
@@ -47,7 +47,7 @@ function agregarABiblioteca(nombre, tipo, artista) {
     return;
   }
 
-  biblioteca.push({ nombre, tipo, artista });
+  biblioteca.push({ nombre, tipo, artista, audio });
   document.dispatchEvent(new CustomEvent('biblioteca:cambio'));
   mostrarAviso(`«${nombre}» se guardó en tu biblioteca`);
 }
@@ -57,7 +57,8 @@ document.querySelectorAll('.btn-agregar').forEach((boton) => {
     agregarABiblioteca(
       boton.dataset.nombre,
       boton.dataset.tipo || 'Pista',
-      boton.dataset.artista || 'Artista desconocido'
+      boton.dataset.artista || 'Artista desconocido',
+      boton.dataset.audio
     );
   });
 });
@@ -141,12 +142,6 @@ if (btnVaciarBiblioteca) {
   });
 }
 
-if (btnReproducirTodo) {
-  btnReproducirTodo.addEventListener('click', () => {
-    mostrarAviso('Reproduciendo biblioteca completa...');
-  });
-}
-
 document.addEventListener('biblioteca:cambio', pintarBiblioteca);
 pintarBiblioteca();
 
@@ -161,6 +156,7 @@ if (modalDetalles) {
       nombre: boton.dataset.nombre,
       tipo: boton.dataset.tipo,
       artista: boton.dataset.artista || 'Artista de PlaySphere',
+      audio: boton.dataset.audio,
     };
 
     const imagen = document.getElementById('modalImagen');
@@ -193,7 +189,8 @@ if (modalDetalles) {
         agregarABiblioteca(
           `${elementoEnModal.nombre}`,
           elementoEnModal.tipo,
-          `${elementoEnModal.artista}`
+          `${elementoEnModal.artista}`,
+          elementoEnModal.audio
         );
         bootstrap.Modal.getInstance(modalDetalles).hide();
       }
@@ -239,9 +236,12 @@ if (btnArriba) {
 // ===== REPRODUCTOR DE AUDIO =====
 const reproductor = new Audio();
 let botonActual = null;
+let reproduciendoLista = false;
+let indiceLista = 0;
 
 document.querySelectorAll('.btn-reproducir').forEach(function (boton) {
   boton.addEventListener('click', function () {
+    reproduciendoLista = false;
     const ruta = boton.dataset.audio;
 
     // Si se pulsa el mismo botón: pausar o continuar
@@ -269,8 +269,38 @@ document.querySelectorAll('.btn-reproducir').forEach(function (boton) {
 
 // Al terminar el audio, volver al estado inicial
 reproductor.addEventListener('ended', function () {
+  if (reproduciendoLista) {
+    reproducirDeLista(indiceLista + 1);
+    return;
+  }
   if (botonActual) {
     botonActual.innerHTML = '<i class="bi bi-play-fill"></i> Reproducir';
     botonActual = null;
   }
 });
+
+function reproducirDeLista(indice) {
+  while (indice < biblioteca.length && !biblioteca[indice].audio) {
+    indice++;
+  }
+  if (indice >= biblioteca.length) {
+    reproduciendoLista = false;
+    mostrarAviso('Terminó tu biblioteca');
+    return;
+  }
+  indiceLista = indice;
+  reproductor.src = biblioteca[indice].audio;
+  reproductor.play().catch(() => reproducirDeLista(indice + 1));
+  mostrarAviso('Reproduciendo: ' + biblioteca[indice].nombre);
+}
+
+if (btnReproducirTodo) {
+  btnReproducirTodo.addEventListener('click', () => {
+    if (botonActual) {
+      botonActual.innerHTML = '<i class="bi bi-play-fill"></i> Reproducir';
+      botonActual = null;
+    }
+    reproduciendoLista = true;
+    reproducirDeLista(0);
+  });
+}
